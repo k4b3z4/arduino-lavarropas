@@ -144,13 +144,16 @@ void loop() {
   if(cambia_programa){
     lcd.setCursor(0, 0);
     if(programa == 1){
-      lcd.print("Prg C           ");
+      lcd.print("Prg C       /");
+      lcd.print(sizeof(PROG_C));
     }
     if(programa == 2){
-      lcd.print("Prg D           ");
+      lcd.print("Prg D       /");
+      lcd.print(sizeof(PROG_D));
     }
     if(programa == 3){
-      lcd.print("Prg E           ");
+      lcd.print("Prg E       /");
+      lcd.print(sizeof(PROG_E));
     }
     if(programa == 4){
       lcd.print("Fin             ");
@@ -175,7 +178,7 @@ void IncrementaContador() {
       return;
   }
 
-  lcd.setCursor(13, 0);
+  lcd.setCursor(9, 0);
   lcd.print(contador);
 
 
