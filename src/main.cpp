@@ -48,6 +48,7 @@ bool   lavando   = false;
 int    programa  = 1;
 bool   cambia_programa = false;
 int    boton     = 0;
+char   buffer[18];
 
 // *******************************************************************
 
@@ -84,12 +85,14 @@ void setup() {
 
   // 10 segundos
   timer.every(10000, IncrementaContador);
+
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
 
   // primera linea
   lcd.setCursor(0, 0);
-  lcd.print("Prg C");
+  sprintf(buffer,"Prg C       /%03d",sizeof(PROG_C));
+  lcd.print(buffer);
 
   // segunda linea
   lcd.setCursor(0, 1);
@@ -144,16 +147,16 @@ void loop() {
   if(cambia_programa){
     lcd.setCursor(0, 0);
     if(programa == 1){
-      lcd.print("Prg C       /");
-      lcd.print(sizeof(PROG_C));
+      sprintf(buffer,"Prg C       /%03u",sizeof(PROG_C));
+      lcd.print(buffer);
     }
     if(programa == 2){
-      lcd.print("Prg D       /");
-      lcd.print(sizeof(PROG_D));
+      sprintf(buffer,"Prg D       /%03u",sizeof(PROG_D));
+      lcd.print(buffer);
     }
     if(programa == 3){
-      lcd.print("Prg E       /");
-      lcd.print(sizeof(PROG_E));
+      sprintf(buffer,"Prg E       /%03u",sizeof(PROG_E));
+      lcd.print(buffer);
     }
     if(programa == 4){
       lcd.print("Fin             ");
@@ -172,14 +175,13 @@ void loop() {
 
 void IncrementaContador() {
 
-
-
   if(lavando == false){
       return;
   }
 
   lcd.setCursor(9, 0);
-  lcd.print(contador);
+  sprintf(buffer,"%03d",contador);
+  lcd.print(buffer);
 
 
   if(programa == 1){
