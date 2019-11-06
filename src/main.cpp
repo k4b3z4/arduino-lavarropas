@@ -33,7 +33,7 @@
 
 // ANALOG
 #define PIN_KEYPAD A0
-#define PIN_PUERTA A5
+#define PIN_PUERTA A5 
 #define PIN_NIVEL  A4
 
 
@@ -110,7 +110,7 @@ void loop() {
   boton = LeerBotones();
 
   if(boton > 0){
-    lcd.setCursor(0, 1);
+    
     if(boton == 2){
       if(programa > 1){
         programa--;
@@ -118,6 +118,7 @@ void loop() {
         cambia_programa=true;
       }
     }
+    
     if(boton == 3){
       if(programa < 6){
         programa++;
@@ -125,6 +126,7 @@ void loop() {
         cambia_programa=true;
       }
     }
+    
     if(boton == 5){ // START
       if(programa == 1 or
          programa == 2 or
@@ -132,9 +134,11 @@ void loop() {
          programa == 5){
            lavando = true;
            contador = 0;
+           lcd.setCursor(0, 1);
            lcd.print("Lavando...      ");
          }
     }
+    
     if(boton == 1){ // STOP
       lavando = false;
       digitalWrite(PIN_K1, 1);
@@ -143,9 +147,11 @@ void loop() {
       digitalWrite(PIN_K4, 1);
       digitalWrite(PIN_K5, 1);
       digitalWrite(PIN_K6, 1);
+      lcd.setCursor(0, 1);
       lcd.print("Listo...        ");
       cambia_programa=true;
     }
+    
     delay(500);
   }
 
@@ -166,8 +172,6 @@ void loop() {
     if(programa == 4){
       sprintf(buffer,"Prg -       /000");
       lcd.print(buffer);
-      lcd.setCursor(0, 1);
-      lcd.print("Finalizado      ");
       digitalWrite(PIN_K1, 1);
       digitalWrite(PIN_K2, 1);
       digitalWrite(PIN_K3, 1);
@@ -183,8 +187,6 @@ void loop() {
     if(programa == 6){
       sprintf(buffer,"Prg -       /000");
       lcd.print(buffer);
-      lcd.setCursor(0, 1);
-      lcd.print("Finalizado      ");
       digitalWrite(PIN_K1, 1);
       digitalWrite(PIN_K2, 1);
       digitalWrite(PIN_K3, 1);
@@ -255,6 +257,8 @@ void IncrementaContador() {
     digitalWrite(PIN_K5, !(PROG_E[contador] & B00001000));
     digitalWrite(PIN_K6, !(PROG_E[contador] & B00000100));
     if(contador == sizeof(PROG_E)-1 ){
+      lcd.setCursor(0, 1);
+      lcd.print("Finalizado      ");
       cambia_programa=true;
       programa ++;
       contador = 0;
@@ -270,6 +274,8 @@ void IncrementaContador() {
     digitalWrite(PIN_K5, !(PROG_K[contador] & B00001000));
     digitalWrite(PIN_K6, !(PROG_K[contador] & B00000100));
     if(contador == sizeof(PROG_K)-1 ){
+      lcd.setCursor(0, 1);
+      lcd.print("Finalizado      ");
       cambia_programa=true;
       programa ++;
       contador = 0;
