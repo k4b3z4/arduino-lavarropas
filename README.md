@@ -10,3 +10,7 @@ Esquema Electrico:
 
 ![esquema](https://raw.githubusercontent.com/k4b3z4/arduino-lavarropas/master/docs/circuit.png)
 
+Archivos 3D:
+
+![esquema](https://raw.githubusercontent.com/k4b3z4/arduino-lavarropas/master/docs/frente_lavarropas.png)
+![esquema](https://raw.githubusercontent.com/k4b3z4/arduino-lavarropas/master/docs/soporte_reles.png)
