@@ -6,7 +6,7 @@
 ![relay module](https://raw.githubusercontent.com/k4b3z4/arduino-lavarropas/master/docs/4-channel%20relay%20Module-800x800.jpg)
 
 
-Esquema Electrico:
+# Esquema Electrico:
 
 ![esquema](https://raw.githubusercontent.com/k4b3z4/arduino-lavarropas/master/docs/circuit.png)
 
@@ -26,7 +26,7 @@ Esquema Electrico:
 * falta cableado boton "no centrifuga"
 * falta cableado boton "no desagota"
 
-Archivos 3D:
+# Archivos 3D:
 
 ![esquema](https://raw.githubusercontent.com/k4b3z4/arduino-lavarropas/master/docs/frente_lavarropas.png)
 ![esquema](https://raw.githubusercontent.com/k4b3z4/arduino-lavarropas/master/docs/soporte_reles.png)
