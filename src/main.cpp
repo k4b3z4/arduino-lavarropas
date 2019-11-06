@@ -119,16 +119,21 @@ void loop() {
       }
     }
     if(boton == 3){
-      if(programa < 3){
+      if(programa < 6){
         programa++;
         contador=0;
         cambia_programa=true;
       }
     }
     if(boton == 5){ // START
-      lavando = true;
-      contador = 0;
-      lcd.print("Lavando...      ");
+      if(programa == 1 or
+         programa == 2 or
+         programa == 3 or
+         programa == 5){
+           lavando = true;
+           contador = 0;
+           lcd.print("Lavando...      ");
+         }
     }
     if(boton == 1){ // STOP
       lavando = false;
@@ -159,15 +164,37 @@ void loop() {
       lcd.print(buffer);
     }
     if(programa == 4){
-      lavando = false;
+      sprintf(buffer,"Prg -       /000");
+      lcd.print(buffer);
+      lcd.setCursor(0, 1);
+      lcd.print("Finalizado      ");
       digitalWrite(PIN_K1, 1);
       digitalWrite(PIN_K2, 1);
       digitalWrite(PIN_K3, 1);
       digitalWrite(PIN_K4, 1);
       digitalWrite(PIN_K5, 1);
       digitalWrite(PIN_K6, 1);
-      lcd.print("Fin             ");
+      lavando = false;
     }
+    if(programa == 5){
+      sprintf(buffer,"Prg K       /%03u",sizeof(PROG_K));
+      lcd.print(buffer);
+    }
+    if(programa == 6){
+      sprintf(buffer,"Prg -       /000");
+      lcd.print(buffer);
+      lcd.setCursor(0, 1);
+      lcd.print("Finalizado      ");
+      digitalWrite(PIN_K1, 1);
+      digitalWrite(PIN_K2, 1);
+      digitalWrite(PIN_K3, 1);
+      digitalWrite(PIN_K4, 1);
+      digitalWrite(PIN_K5, 1);
+      digitalWrite(PIN_K6, 1);
+      lavando = false;
+    }
+
+
     cambia_programa=false;
   }
 
@@ -228,6 +255,21 @@ void IncrementaContador() {
     digitalWrite(PIN_K5, !(PROG_E[contador] & B00001000));
     digitalWrite(PIN_K6, !(PROG_E[contador] & B00000100));
     if(contador == sizeof(PROG_E)-1 ){
+      cambia_programa=true;
+      programa ++;
+      contador = 0;
+      return;
+    }
+  }
+
+  if(programa == 5){
+    digitalWrite(PIN_K1, !(PROG_K[contador] & B10000000));
+    digitalWrite(PIN_K2, !(PROG_K[contador] & B01000000));
+    digitalWrite(PIN_K3, !(PROG_K[contador] & B00100000));
+    digitalWrite(PIN_K4, !(PROG_K[contador] & B00010000));
+    digitalWrite(PIN_K5, !(PROG_K[contador] & B00001000));
+    digitalWrite(PIN_K6, !(PROG_K[contador] & B00000100));
+    if(contador == sizeof(PROG_K)-1 ){
       cambia_programa=true;
       programa ++;
       contador = 0;
