@@ -10,6 +10,22 @@ Esquema Electrico:
 
 ![esquema](https://raw.githubusercontent.com/k4b3z4/arduino-lavarropas/master/docs/circuit.png)
 
+# Funciona:
+
+* Programa largo C -> D -> E
+* Programa corto K
+* carga de agua
+* bomba de vaciado 
+* Presostato para limitar nivel de carga
+
+# No Funciona:
+
+* falta cableado bloqueador de apertura
+* falta cableado calefactor y termostato
+* falta selector de ingreso de agua, el sistema es mecánico (siempre está en posicion enjuague, no es un problema si se utiliza jabón liquido) 
+* falta cableado boton "no centrifuga"
+* falta cableado boton "no desagota"
+
 Archivos 3D:
 
 ![esquema](https://raw.githubusercontent.com/k4b3z4/arduino-lavarropas/master/docs/frente_lavarropas.png)
