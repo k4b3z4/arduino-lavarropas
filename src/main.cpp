@@ -159,8 +159,14 @@ void loop() {
       lcd.print(buffer);
     }
     if(programa == 4){
+      lavando = false;
+      digitalWrite(PIN_K1, 1);
+      digitalWrite(PIN_K2, 1);
+      digitalWrite(PIN_K3, 1);
+      digitalWrite(PIN_K4, 1);
+      digitalWrite(PIN_K5, 1);
+      digitalWrite(PIN_K6, 1);
       lcd.print("Fin             ");
-      lavando=false;
     }
     cambia_programa=false;
   }
