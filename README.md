@@ -10,6 +10,10 @@
 
 ![esquema](https://raw.githubusercontent.com/k4b3z4/arduino-lavarropas/master/docs/circuit.png)
 
+# Manual Orignal completo PDF
+
+![manual](https://raw.githubusercontent.com/k4b3z4/arduino-lavarropas/master/docs/MANUAL_DE_SERVICIO_AWF217.pdf)
+
 # Funciona:
 
 * Programa largo C -> D -> E
