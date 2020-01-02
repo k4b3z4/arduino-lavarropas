@@ -10,6 +10,11 @@
 
 ![esquema](https://raw.githubusercontent.com/k4b3z4/arduino-lavarropas/master/docs/circuit.png)
 
+# Cableado Electrico:
+
+![cableado](https://raw.githubusercontent.com/k4b3z4/arduino-lavarropas/master/docs/esquema-cableado.png)
+
+
 # Manual Orignal completo PDF
 
 ![manual](https://raw.githubusercontent.com/k4b3z4/arduino-lavarropas/master/docs/MANUAL_DE_SERVICIO_AWF217.pdf)
