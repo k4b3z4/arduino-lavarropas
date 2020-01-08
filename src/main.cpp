@@ -33,17 +33,21 @@
 
 // ANALOG
 #define PIN_KEYPAD A0
-#define PIN_PUERTA A5 
+#define PIN_PUERTA A5
 #define PIN_NIVEL  A4
 
 
 // *******************************************************************
 
 
-Timer timer;
+Timer timer;  // timer para programas
+Timer timer2; // timer para Reloj
+
 LiquidCrystal lcd(PIN_RS, PIN_E, PIN_D4, PIN_D5, PIN_D6, PIN_D7);
 
+
 int    contador  = 0;
+int    segundos  = 0;
 bool   lavando   = false;
 int    programa  = 1;
 bool   cambia_programa = false;
@@ -53,6 +57,7 @@ char   buffer[18];
 // *******************************************************************
 
 void IncrementaContador(void);
+void Reloj(void);
 int LeerBotones(void);
 
 
@@ -86,13 +91,14 @@ void setup() {
   // 10 segundos
   timer.every(10000, IncrementaContador);
 
+  // 1 segundo
+  timer2.every(1000, Reloj);
+
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
 
-  // primera linea
-  lcd.setCursor(0, 0);
-  sprintf(buffer,"Prg C       /%03d",sizeof(PROG_C));
-  lcd.print(buffer);
+  // Primer programa
+  cambia_programa = true;
 
   // segunda linea
   lcd.setCursor(0, 1);
@@ -110,7 +116,7 @@ void loop() {
   boton = LeerBotones();
 
   if(boton > 0){
-    
+
     if(boton == 2){
       if(programa > 1){
         programa--;
@@ -118,7 +124,7 @@ void loop() {
         cambia_programa=true;
       }
     }
-    
+
     if(boton == 3){
       if(programa < 6){
         programa++;
@@ -126,7 +132,7 @@ void loop() {
         cambia_programa=true;
       }
     }
-    
+
     if(boton == 5){ // START
       if(programa == 1 or
          programa == 2 or
@@ -138,7 +144,7 @@ void loop() {
            lcd.print("Lavando...      ");
          }
     }
-    
+
     if(boton == 1){ // STOP
       lavando = false;
       digitalWrite(PIN_K1, 1);
@@ -151,27 +157,31 @@ void loop() {
       lcd.print("Listo...        ");
       cambia_programa=true;
     }
-    
+
     delay(500);
   }
 
   if(cambia_programa){
     lcd.setCursor(0, 0);
     if(programa == 1){
-      sprintf(buffer,"Prg C       /%03u",sizeof(PROG_C));
-      lcd.print(buffer);
+      //sprintf(buffer,"Prg C       /%03u",sizeof(PROG_C));
+      lcd.print("Prg C");
+      segundos = sizeof(PROG_C)*10 + sizeof(PROG_D)*10 + sizeof(PROG_E)*10;
     }
     if(programa == 2){
-      sprintf(buffer,"Prg D       /%03u",sizeof(PROG_D));
-      lcd.print(buffer);
+      //sprintf(buffer,"Prg D       /%03u",sizeof(PROG_D));
+      lcd.print("Prg D");
+      segundos = sizeof(PROG_D)*10 + sizeof(PROG_E)*10;
     }
     if(programa == 3){
-      sprintf(buffer,"Prg E       /%03u",sizeof(PROG_E));
-      lcd.print(buffer);
+      //sprintf(buffer,"Prg E       /%03u",sizeof(PROG_E));
+      lcd.print("Prg E");
+      segundos = sizeof(PROG_E)*10;
     }
     if(programa == 4){
-      sprintf(buffer,"Prg -       /000");
-      lcd.print(buffer);
+      //sprintf(buffer,"Prg -       /000");
+      lcd.print("Prg -");
+      segundos = 0;
       digitalWrite(PIN_K1, 1);
       digitalWrite(PIN_K2, 1);
       digitalWrite(PIN_K3, 1);
@@ -181,12 +191,14 @@ void loop() {
       lavando = false;
     }
     if(programa == 5){
-      sprintf(buffer,"Prg K       /%03u",sizeof(PROG_K));
-      lcd.print(buffer);
+      //sprintf(buffer,"Prg K       /%03u",sizeof(PROG_K));
+      lcd.print("Prg K");
+      segundos = sizeof(PROG_K)*10;
     }
     if(programa == 6){
-      sprintf(buffer,"Prg -       /000");
-      lcd.print(buffer);
+      //sprintf(buffer,"Prg -       /000");
+      lcd.print("Prg -");
+      segundos = 0;
       digitalWrite(PIN_K1, 1);
       digitalWrite(PIN_K2, 1);
       digitalWrite(PIN_K3, 1);
@@ -196,11 +208,12 @@ void loop() {
       lavando = false;
     }
 
-
     cambia_programa=false;
+
   }
 
   timer.update();
+  timer2.update();
 
 }
 
@@ -208,15 +221,41 @@ void loop() {
 // ###########################################################################
 
 
+void Reloj(){
+
+  int h;
+  int m;
+  int s;
+
+  h = segundos / 3600;
+  m = ( segundos % 3600 ) / 60;
+  s = ( segundos % 3600 ) % 60;
+
+  lcd.setCursor(8, 0);
+  sprintf(buffer,"%02d:%02d:%02d",h,m,s);
+  lcd.print(buffer);
+
+  if(lavando == true){
+      segundos--;
+  }
+
+  return;
+}
+
+
+
+// ###########################################################################
+// ###########################################################################
+
 void IncrementaContador() {
 
   if(lavando == false){
       return;
   }
 
-  lcd.setCursor(9, 0);
-  sprintf(buffer,"%03d",contador);
-  lcd.print(buffer);
+  //lcd.setCursor(9, 0);
+  //sprintf(buffer,"%03d",contador);
+  //lcd.print(buffer);
 
 
   if(programa == 1){
