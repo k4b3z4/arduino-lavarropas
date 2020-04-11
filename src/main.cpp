@@ -163,22 +163,28 @@ void loop() {
 
   if(cambia_programa){
     lcd.setCursor(0, 0);
+
     if(programa == 1){
+      //sprintf(buffer,"Prg B       /%03u",sizeof(PROG_B));
+      lcd.print("Prg B");
+      segundos = sizeof(PROG_B)*10 + sizeof(PROG_C)*10 + sizeof(PROG_D)*10 + sizeof(PROG_E)*10;
+    }
+    if(programa == 2){
       //sprintf(buffer,"Prg C       /%03u",sizeof(PROG_C));
       lcd.print("Prg C");
       segundos = sizeof(PROG_C)*10 + sizeof(PROG_D)*10 + sizeof(PROG_E)*10;
     }
-    if(programa == 2){
+    if(programa == 3){
       //sprintf(buffer,"Prg D       /%03u",sizeof(PROG_D));
       lcd.print("Prg D");
       segundos = sizeof(PROG_D)*10 + sizeof(PROG_E)*10;
     }
-    if(programa == 3){
+    if(programa == 4){
       //sprintf(buffer,"Prg E       /%03u",sizeof(PROG_E));
       lcd.print("Prg E");
       segundos = sizeof(PROG_E)*10;
     }
-    if(programa == 4){
+    if(programa == 5){
       //sprintf(buffer,"Prg -       /000");
       lcd.print("Prg -");
       segundos = 0;
@@ -190,12 +196,12 @@ void loop() {
       digitalWrite(PIN_K6, 1);
       lavando = false;
     }
-    if(programa == 5){
+    if(programa == 6){
       //sprintf(buffer,"Prg K       /%03u",sizeof(PROG_K));
       lcd.print("Prg K");
       segundos = sizeof(PROG_K)*10;
     }
-    if(programa == 6){
+    if(programa == 7){
       //sprintf(buffer,"Prg -       /000");
       lcd.print("Prg -");
       segundos = 0;
@@ -257,8 +263,22 @@ void IncrementaContador() {
   //sprintf(buffer,"%03d",contador);
   //lcd.print(buffer);
 
+if(programa == 1){
+    digitalWrite(PIN_K1, !(PROG_B[contador] & B10000000 ));
+    digitalWrite(PIN_K2, !(PROG_B[contador] & B01000000 ));
+    digitalWrite(PIN_K3, !(PROG_B[contador] & B00100000 ));
+    digitalWrite(PIN_K4, !(PROG_B[contador] & B00010000 ));
+    digitalWrite(PIN_K5, !(PROG_B[contador] & B00001000 ));
+    digitalWrite(PIN_K6, !(PROG_B[contador] & B00000100 ));
+    if(contador == sizeof(PROG_B)-1 ){
+      cambia_programa=true;
+      programa ++;
+      contador = 0;
+      return;
+    }
+  }
 
-  if(programa == 1){
+  if(programa == 2){
     digitalWrite(PIN_K1, !(PROG_C[contador] & B10000000 ));
     digitalWrite(PIN_K2, !(PROG_C[contador] & B01000000 ));
     digitalWrite(PIN_K3, !(PROG_C[contador] & B00100000 ));
@@ -273,7 +293,7 @@ void IncrementaContador() {
     }
   }
 
-  if(programa == 2){
+  if(programa == 3){
     digitalWrite(PIN_K1, !(PROG_D[contador] & B10000000));
     digitalWrite(PIN_K2, !(PROG_D[contador] & B01000000));
     digitalWrite(PIN_K3, !(PROG_D[contador] & B00100000));
@@ -288,7 +308,7 @@ void IncrementaContador() {
     }
   }
 
-  if(programa == 3){
+  if(programa == 4){
     digitalWrite(PIN_K1, !(PROG_E[contador] & B10000000));
     digitalWrite(PIN_K2, !(PROG_E[contador] & B01000000));
     digitalWrite(PIN_K3, !(PROG_E[contador] & B00100000));
@@ -305,7 +325,7 @@ void IncrementaContador() {
     }
   }
 
-  if(programa == 5){
+  if(programa == 6){
     digitalWrite(PIN_K1, !(PROG_K[contador] & B10000000));
     digitalWrite(PIN_K2, !(PROG_K[contador] & B01000000));
     digitalWrite(PIN_K3, !(PROG_K[contador] & B00100000));
