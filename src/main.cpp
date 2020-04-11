@@ -126,7 +126,7 @@ void loop() {
     }
 
     if(boton == 3){
-      if(programa < 6){
+      if(programa < 7){
         programa++;
         contador=0;
         cambia_programa=true;
@@ -137,7 +137,8 @@ void loop() {
       if(programa == 1 or
          programa == 2 or
          programa == 3 or
-         programa == 5){
+         programa == 4 or
+         programa == 6){
            lavando = true;
            contador = 0;
            lcd.setCursor(0, 1);
