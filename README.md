@@ -21,7 +21,7 @@
 
 # Funciona:
 
-* Programa largo C -> D -> E
+* Programa largo B -> C -> D -> E
 * Programa corto K
 * carga de agua
 * bomba de vaciado 
