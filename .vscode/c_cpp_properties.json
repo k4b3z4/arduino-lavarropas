@@ -1,15 +1,17 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
 {
     "configurations": [
         {
-            "name": "!!! WARNING !!! AUTO-GENERATED FILE, PLEASE DO NOT MODIFY IT AND USE https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags"
-        },
-        {
-            "name": "Linux",
+            "name": "PlatformIO",
             "includePath": [
-                "/home/cabeza/Nextcloud/Arduino/arduino-lavarropas/include",
-                "/home/cabeza/Nextcloud/Arduino/arduino-lavarropas/src",
-                "/home/cabeza/Nextcloud/Arduino/arduino-lavarropas/.pio/libdeps/uno/Timer_ID75",
-                "/home/cabeza/Nextcloud/Arduino/arduino-lavarropas/.pio/libdeps/uno/LiquidCrystal_ID136",
+                "/home/cabeza/Programas/arduino-lavarropas/include",
+                "/home/cabeza/Programas/arduino-lavarropas/src",
+                "/home/cabeza/Programas/arduino-lavarropas/.pio/libdeps/uno/Timer",
+                "/home/cabeza/Programas/arduino-lavarropas/.pio/libdeps/uno/LiquidCrystal",
                 "/home/cabeza/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
                 "/home/cabeza/.platformio/packages/framework-arduino-avr/cores/arduino",
                 "/home/cabeza/.platformio/packages/framework-arduino-avr/variants/standard",
@@ -23,10 +25,10 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "/home/cabeza/Nextcloud/Arduino/arduino-lavarropas/include",
-                    "/home/cabeza/Nextcloud/Arduino/arduino-lavarropas/src",
-                    "/home/cabeza/Nextcloud/Arduino/arduino-lavarropas/.pio/libdeps/uno/Timer_ID75",
-                    "/home/cabeza/Nextcloud/Arduino/arduino-lavarropas/.pio/libdeps/uno/LiquidCrystal_ID136",
+                    "/home/cabeza/Programas/arduino-lavarropas/include",
+                    "/home/cabeza/Programas/arduino-lavarropas/src",
+                    "/home/cabeza/Programas/arduino-lavarropas/.pio/libdeps/uno/Timer",
+                    "/home/cabeza/Programas/arduino-lavarropas/.pio/libdeps/uno/LiquidCrystal",
                     "/home/cabeza/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
                     "/home/cabeza/.platformio/packages/framework-arduino-avr/cores/arduino",
                     "/home/cabeza/.platformio/packages/framework-arduino-avr/variants/standard",
@@ -39,7 +41,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=40301",
+                "PLATFORMIO=50101",
                 "ARDUINO_AVR_UNO",
                 "F_CPU=16000000L",
                 "ARDUINO_ARCH_AVR",
@@ -47,7 +49,6 @@
                 "__AVR_ATmega328P__",
                 ""
             ],
-            "intelliSenseMode": "clang-x64",
             "cStandard": "c11",
             "cppStandard": "c++11",
             "compilerPath": "/home/cabeza/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",

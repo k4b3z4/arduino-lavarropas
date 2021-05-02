@@ -13,6 +13,9 @@
 
  byte PROG_K[] = {
 
+   // 10 seg vaciado y llenado
+   B00001100,
+
    // 1 minutos llenado
    B00000100,
    B00000100,
@@ -679,6 +682,9 @@
 
 
 byte PROG_B[]  = {
+
+  // 10 seg vaciado y llenado
+  B00001100,
 
   // 5 minutos llenado
   B00000100,
