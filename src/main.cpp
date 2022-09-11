@@ -494,26 +494,21 @@ void Estado(byte B){
 
 int calculaTotal(int prog){
 
-    int seg;
+    int seg = 0;
 
     switch (prog){
         case 1:
-            seg = sizeof(PROG_B)*10 + sizeof(PROG_C)*10 + sizeof(PROG_D)*10 + sizeof(PROG_E)*10;
-            break;
+            seg += sizeof(PROG_B)*10;
         case 2:
-            seg = sizeof(PROG_C)*10 + sizeof(PROG_D)*10 + sizeof(PROG_E)*10;
-            break;
+            seg += sizeof(PROG_C)*10;
         case 3:
-            seg = sizeof(PROG_D)*10 + sizeof(PROG_E)*10;
-            break;
+            seg += sizeof(PROG_D)*10;
         case 4:
-            seg = sizeof(PROG_E)*10;
+            seg += sizeof(PROG_E)*10;
             break;
         case 6:
-            seg = sizeof(PROG_K)*10;
+            seg += sizeof(PROG_K)*10;
             break;
-        default:
-            seg = 0;
     }
 
     return seg;
