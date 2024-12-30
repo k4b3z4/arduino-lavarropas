@@ -15,11 +15,11 @@
                 "/home/cabeza/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
                 "/home/cabeza/.platformio/packages/framework-arduino-avr/cores/arduino",
                 "/home/cabeza/.platformio/packages/framework-arduino-avr/variants/standard",
+                "/home/cabeza/.platformio/lib/_tmp_installing-7cTeKn-package",
                 "/home/cabeza/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
                 "/home/cabeza/.platformio/packages/framework-arduino-avr/libraries/HID/src",
                 "/home/cabeza/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
                 "/home/cabeza/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
-                "/home/cabeza/.platformio/packages/tool-unity",
                 ""
             ],
             "browse": {
@@ -32,16 +32,16 @@
                     "/home/cabeza/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
                     "/home/cabeza/.platformio/packages/framework-arduino-avr/cores/arduino",
                     "/home/cabeza/.platformio/packages/framework-arduino-avr/variants/standard",
+                    "/home/cabeza/.platformio/lib/_tmp_installing-7cTeKn-package",
                     "/home/cabeza/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
                     "/home/cabeza/.platformio/packages/framework-arduino-avr/libraries/HID/src",
                     "/home/cabeza/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
                     "/home/cabeza/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
-                    "/home/cabeza/.platformio/packages/tool-unity",
                     ""
                 ]
             },
             "defines": [
-                "PLATFORMIO=50101",
+                "PLATFORMIO=60116",
                 "ARDUINO_AVR_UNO",
                 "F_CPU=16000000L",
                 "ARDUINO_ARCH_AVR",
@@ -49,8 +49,8 @@
                 "__AVR_ATmega328P__",
                 ""
             ],
-            "cStandard": "c11",
-            "cppStandard": "c++11",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++11",
             "compilerPath": "/home/cabeza/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
             "compilerArgs": [
                 "-mmcu=atmega328p",

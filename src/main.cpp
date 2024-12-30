@@ -27,7 +27,7 @@
 #define PIN_K1 12
 #define PIN_K2 11
 #define PIN_K3 13
-#define PIN_K4 2
+#define PIN_K4 A1
 #define PIN_K5 1
 #define PIN_K6 0
 
@@ -38,7 +38,7 @@
 
 // ENCODER
 #define PIN_CLK  3
-#define PIN_DATA A1
+#define PIN_DATA 2
 #define PIN_SW   A2
 
 // BEEP
@@ -69,7 +69,10 @@ bool menu_parar = false;
 bool menu_pausa = false;
 
 int  encoder_val = 0;
+int  encoder_last = 0;
 int  encoder = 0;
+int  currentStateCLK;
+int  lastStateCLK;
 
 int beeps = 0;
 
@@ -141,8 +144,11 @@ void setup() {
     lcd.setCursor(0, 1);
     lcd.print("Listo...        ");
 
+
+    lastStateCLK = digitalRead(PIN_CLK);
     // interrupcion encoder
     attachInterrupt(digitalPinToInterrupt(PIN_CLK), doEncoder, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(PIN_DATA), doEncoder, CHANGE);
 
     beeps = 3;
 
@@ -156,60 +162,69 @@ void loop() {
 
     // Menu seleccion de programa
     if (menu_posicion == 1 && lavando == false){
-        if (encoder < 10){
+        if (programa == 1){
             lcd.setCursor(0,1);       
-            lcd.print("[B] C D E - K -");
-            programa = 1;
+            lcd.print("[B]CDE-K-L-V-X-");
         }
-        if (encoder > 10 & encoder < 20){ 
+        if (programa == 2){ 
             lcd.setCursor(0,1);
-            lcd.print("B [C] D E - K -");
-            programa = 2;
+            lcd.print("B[C]DE-K-L-V-X-");
         }
-        if (encoder > 20 & encoder < 30){ 
+        if (programa == 3){ 
             lcd.setCursor(0,1);
-            lcd.print("B C [D] E - K -");
-            programa = 3;
+            lcd.print("BC[D]E-K-L-V-X-");
         }
-        if (encoder > 30 & encoder < 40){ 
+        if (programa == 4){ 
             lcd.setCursor(0,1);
-            lcd.print("B C D [E] - K -");
-            programa = 4;
+            lcd.print("BCD[E]-K-L-V-X-");
         }
-        if (encoder > 40 & encoder < 50){ 
+        if (programa == 6){ 
             lcd.setCursor(0,1);
-            lcd.print("B C D E [-] K -");
-            programa = 5;
+            lcd.print("BCDE-[K]-L-V-X-");
         }
-        if (encoder > 50 & encoder < 60){ 
+        if (programa == 8){ 
             lcd.setCursor(0,1);
-            lcd.print("B C D E - [K] -");
-            programa = 6;
+            lcd.print("BCDE-K-[L]-V-X-");
         }
-        if (encoder > 60){ 
+        if (programa == 10){ 
             lcd.setCursor(0,1);
-            lcd.print("B C D E - K [-]");
-            programa = 7;
+            lcd.print("BCDE-K-L-[V]-X-");
         }
+        if (programa == 12){ 
+            lcd.setCursor(0,1);
+            lcd.print("BCDE-K-L-V-[X]-");
+        }
+
         segundos = calculaTotal(programa);
-        if (encoder > 70) encoder = 70;
-        if (encoder < 0 ) encoder = 0;
+
+        if (encoder_last < encoder_val){
+            programa++;
+            if (programa>12) programa=12;
+        }
+        if (encoder_last > encoder_val){
+            programa--;
+            if (programa<1) programa=1; 
+        }
+
+        encoder_last = encoder_val;
     }
 
     // Menu detener lavado (modo pausa)
     if( menu_posicion == 1 && lavando == true){
-        if (encoder < 10){
+
+        if (encoder == 0){
             lcd.setCursor(0,1);       
             lcd.print("Parar? [No] Si ");
             menu_parar = false;
         }
-        if (encoder > 10){ 
+        if (encoder == 1){ 
             lcd.setCursor(0,1);
             lcd.print("Parar?  No [Si]");
             menu_parar = true;
         }
-        if (encoder > 20) encoder = 20;
-        if (encoder < 0 ) encoder = 0;
+        if (encoder > 1) encoder = 1;
+        if (encoder < 0) encoder = 0;
+
     }
 
 
@@ -217,6 +232,7 @@ void loop() {
     if( !digitalRead(PIN_SW) & !menu_presionado){
 
         menu_presionado = 1;
+        encoder = 0;
 
         // activa menu principal
         if(menu_posicion == 0){
@@ -224,10 +240,8 @@ void loop() {
                 lcd.clear();
                 lcd.setCursor(0,0);  
                 lcd.print("Prg?");
-                encoder = 0;
                 menu_posicion = 1;
             }else{
-                encoder = 0;
                 menu_posicion = 1;
                 menu_pausa = true;
                 digitalWrite(PIN_K1, 1);
@@ -244,7 +258,10 @@ void loop() {
             lcd.setCursor(0,1);
             lcd.print("               ");
             if(lavando == false){
-                if(programa == 1 || programa == 2 || programa == 3 || programa == 4 || programa == 6){
+                if(programa == 1 || programa == 2 || 
+                   programa == 3 || programa == 4 || 
+                   programa == 6 || programa == 8 ||
+                   programa == 10 || programa == 12 ){
                     lavando = true;
                 }
                 cambia_programa = true;
@@ -287,8 +304,20 @@ void loop() {
             case 6:
                 lcd.print("Prg K");
                 break;
+            case 8:
+                lcd.print("Prg L");
+                break;
+            case 10:
+                lcd.print("Prg V");
+                break;
+            case 12:
+                lcd.print("Prg X");
+                break;
             case 5:
             case 7:
+            case 9:
+            case 11:
+            case 13:
                 lcd.print("Prg -");
                 digitalWrite(PIN_K1, 1);
                 digitalWrite(PIN_K2, 1);
@@ -456,6 +485,63 @@ void IncrementaContador() {
         }
     }
 
+    if(programa == 8){
+        digitalWrite(PIN_K1, !(PROG_L[contador] & B10000000));
+        digitalWrite(PIN_K2, !(PROG_L[contador] & B01000000));
+        digitalWrite(PIN_K3, !(PROG_L[contador] & B00100000));
+        digitalWrite(PIN_K4, !(PROG_L[contador] & B00010000));
+        digitalWrite(PIN_K5, !(PROG_L[contador] & B00001000));
+        digitalWrite(PIN_K6, !(PROG_L[contador] & B00000100));
+        if(PROG_L[contador] & B00000001) beeps = 6;
+        Estado(PROG_L[contador]);
+        if(contador == sizeof(PROG_L)-1 ){
+            lcd.setCursor(0, 1);
+            lcd.print("Finalizado      ");
+            cambia_programa=true;
+            programa ++;
+            contador = 0;
+            return;
+        }
+    }
+
+    if(programa == 10){
+        digitalWrite(PIN_K1, !(PROG_V[contador] & B10000000));
+        digitalWrite(PIN_K2, !(PROG_V[contador] & B01000000));
+        digitalWrite(PIN_K3, !(PROG_V[contador] & B00100000));
+        digitalWrite(PIN_K4, !(PROG_V[contador] & B00010000));
+        digitalWrite(PIN_K5, !(PROG_V[contador] & B00001000));
+        digitalWrite(PIN_K6, !(PROG_V[contador] & B00000100));
+        if(PROG_V[contador] & B00000001) beeps = 6;
+        Estado(PROG_V[contador]);
+        if(contador == sizeof(PROG_V)-1 ){
+            lcd.setCursor(0, 1);
+            lcd.print("Finalizado      ");
+            cambia_programa=true;
+            programa ++;
+            contador = 0;
+            return;
+        }
+    }
+
+    if(programa == 12){
+        digitalWrite(PIN_K1, !(PROG_X[contador] & B10000000));
+        digitalWrite(PIN_K2, !(PROG_X[contador] & B01000000));
+        digitalWrite(PIN_K3, !(PROG_X[contador] & B00100000));
+        digitalWrite(PIN_K4, !(PROG_X[contador] & B00010000));
+        digitalWrite(PIN_K5, !(PROG_X[contador] & B00001000));
+        digitalWrite(PIN_K6, !(PROG_X[contador] & B00000100));
+        if(PROG_X[contador] & B00000001) beeps = 6;
+        Estado(PROG_X[contador]);
+        if(contador == sizeof(PROG_X)-1 ){
+            lcd.setCursor(0, 1);
+            lcd.print("Finalizado      ");
+            cambia_programa=true;
+            programa ++;
+            contador = 0;
+            return;
+        }
+    }
+
     contador ++;
 
 }
@@ -509,6 +595,16 @@ int calculaTotal(int prog){
         case 6:
             seg += sizeof(PROG_K)*10;
             break;
+        case 8:
+            seg += sizeof(PROG_L)*10;
+            break;
+        case 10:
+            seg += sizeof(PROG_V)*10;
+            break;
+        case 12:
+            seg += sizeof(PROG_X)*10;
+            break;
+
     }
 
     return seg;
@@ -517,12 +613,18 @@ int calculaTotal(int prog){
 
 
 void doEncoder(){
-    if(menu_posicion){
-        if (digitalRead(PIN_CLK) == digitalRead(PIN_DATA))  {
-            encoder++;
-        }else{
-            encoder--;
-        }
-        encoder_val = encoder / 2.5;
-    }
+
+    currentStateCLK = digitalRead(PIN_CLK);
+
+	if (currentStateCLK != lastStateCLK  && currentStateCLK == 1){
+		if (digitalRead(PIN_DATA) != currentStateCLK) {
+			encoder --;
+		} else {
+			encoder ++;
+		}
+        encoder_val = encoder;
+	}
+
+	lastStateCLK = currentStateCLK;
+
 }
