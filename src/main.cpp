@@ -10,6 +10,9 @@
 #include <Timer.h>
 #include <LiquidCrystal.h>
 #include "programas.h"
+#include <EEPROM.h>
+#include "EEPROMAnything.h"
+
 
 
 // ********************************************************************
@@ -47,7 +50,7 @@
 // *******************************************************************
 
 
-Timer timer;  // timer para programas
+Timer timer1; // timer para programas
 Timer timer2; // timer para Reloj
 Timer timer3; // timer para beep
 
@@ -59,6 +62,7 @@ int    segundos  = 0;
 bool   lavando   = false;
 int    programa  = 1;
 bool   cambia_programa = false;
+bool   restaura = false;
 int    boton     = 0;
 char   buffer[18];
 
@@ -67,6 +71,7 @@ int  menu_activar  = 0;
 bool menu_presionado = false;
 bool menu_parar = false;
 bool menu_pausa = false;
+
 
 int  encoder_val = 0;
 int  encoder_last = 0;
@@ -126,7 +131,7 @@ void setup() {
     digitalWrite(PIN_KEYPAD, LOW);      // ensure pull-up is off on Key ADC pin
 
     // 10 segundos
-    timer.every(10000, IncrementaContador);
+    timer1.every(10000, IncrementaContador);
 
     // 1 segundo
     timer2.every(1000, Reloj);
@@ -150,7 +155,19 @@ void setup() {
     attachInterrupt(digitalPinToInterrupt(PIN_CLK), doEncoder, CHANGE);
     attachInterrupt(digitalPinToInterrupt(PIN_DATA), doEncoder, CHANGE);
 
-    beeps = 3;
+
+    //recupera valores de la EEPROM
+    EEPROM_readAnything(10, lavando);
+    
+    if(lavando){
+        EEPROM_readAnything(20, programa);
+        EEPROM_readAnything(30, segundos);
+        EEPROM_readAnything(40, contador);
+        restaura = true;
+        beeps = 1;
+    }else{
+        beeps = 3;
+    }
 
 }
 
@@ -162,51 +179,60 @@ void loop() {
 
     // Menu seleccion de programa
     if (menu_posicion == 1 && lavando == false){
-        if (programa == 1){
-            lcd.setCursor(0,1);       
-            lcd.print("[B]CDE-K-L-V-X-");
-        }
-        if (programa == 2){ 
-            lcd.setCursor(0,1);
-            lcd.print("B[C]DE-K-L-V-X-");
-        }
-        if (programa == 3){ 
-            lcd.setCursor(0,1);
-            lcd.print("BC[D]E-K-L-V-X-");
-        }
-        if (programa == 4){ 
-            lcd.setCursor(0,1);
-            lcd.print("BCD[E]-K-L-V-X-");
-        }
-        if (programa == 6){ 
-            lcd.setCursor(0,1);
-            lcd.print("BCDE-[K]-L-V-X-");
-        }
-        if (programa == 8){ 
-            lcd.setCursor(0,1);
-            lcd.print("BCDE-K-[L]-V-X-");
-        }
-        if (programa == 10){ 
-            lcd.setCursor(0,1);
-            lcd.print("BCDE-K-L-[V]-X-");
-        }
-        if (programa == 12){ 
-            lcd.setCursor(0,1);
-            lcd.print("BCDE-K-L-V-[X]-");
+
+        lcd.setCursor(0,1);
+
+        switch (encoder_val){
+            case 1:
+                lcd.print("[B]CDE-K-L-V-X-");
+                break;
+            case 2:
+                lcd.print("B[C]DE-K-L-V-X-");
+                break;
+            case 3:
+                lcd.print("BC[D]E-K-L-V-X-");
+                break;
+            case 4:
+                lcd.print("BCD[E]-K-L-V-X-");
+                break;
+            case 5:
+                lcd.print("BCDE[-]K-L-V-X-");
+                break;
+            case 6:
+                lcd.print("BCDE-[K]-L-V-X-");
+                break;
+            case 7:
+                lcd.print("BCDE-K[-]L-V-X-");
+                break;
+            case 8:
+                lcd.print("BCDE-K-[L]-V-X-");
+                break;
+            case 9:
+                lcd.print("BCDE-K-L[-]V-X-");
+                break;
+            case 10:
+                lcd.print("BCDE-K-L-[V]-X-");
+                break;
+            case 11:
+                lcd.print("BCDE-K-L-V[-]X-");
+                break;
+            case 12:
+                lcd.print("BCDE-K-L-V-[X]-");
+                break;
+            case 13:
+                lcd.print("BCDE-K-L-V-X[-]");
+                break;
         }
 
-        segundos = calculaTotal(programa);
+        segundos = calculaTotal(encoder_val);
 
-        if (encoder_last < encoder_val){
-            programa++;
-            if (programa>12) programa=12;
+        if (encoder_val > 13){
+            encoder_val = 13;
         }
-        if (encoder_last > encoder_val){
-            programa--;
-            if (programa<1) programa=1; 
+        if (encoder_val < 1){
+            encoder_val = 1; 
         }
 
-        encoder_last = encoder_val;
     }
 
     // Menu detener lavado (modo pausa)
@@ -255,6 +281,8 @@ void loop() {
 
         // vuelve del menu principal
         else if(menu_posicion == 1){
+            programa = encoder_val;
+            EEPROM_writeAnything(20, programa);
             lcd.setCursor(0,1);
             lcd.print("               ");
             if(lavando == false){
@@ -263,15 +291,17 @@ void loop() {
                    programa == 6 || programa == 8 ||
                    programa == 10 || programa == 12 ){
                     lavando = true;
+                    EEPROM_writeAnything(10, lavando);
                 }
                 cambia_programa = true;
             }else{
                 if(menu_parar){
+                    lavando = false;
+                    EEPROM_writeAnything(10, lavando);
                     lcd.setCursor(0, 0);
                     lcd.print("Prog -  00:00:00");
                     lcd.setCursor(0, 1);
                     lcd.print("Finalizado      ");
-                    lavando = false;
                 }
                 menu_pausa = false;
             }
@@ -279,10 +309,10 @@ void loop() {
         }
 
     }
+
     if(digitalRead(PIN_SW)){
         menu_presionado = 0;
     }
-
 
     if(cambia_programa){
 
@@ -326,15 +356,20 @@ void loop() {
                 digitalWrite(PIN_K5, 1);
                 digitalWrite(PIN_K6, 1);
                 lavando = false;
+                EEPROM_writeAnything(10, lavando);
                 break;
         }
 
-        segundos = calculaTotal(programa);
+        if(restaura){
+            restaura = false;
+        }else{
+            segundos = calculaTotal(programa);
+        }
         cambia_programa = false;
 
     }
 
-    timer.update();
+    timer1.update();
     timer2.update();
     timer3.update();
 
@@ -360,6 +395,7 @@ void Reloj(){
 
     if(lavando == true and menu_pausa == false){
         segundos--;
+        EEPROM_writeAnything(30, segundos);
     }
 
     return;
@@ -383,6 +419,7 @@ void Beep(void){
 // ###########################################################################
 
 void IncrementaContador() {
+
 
     if(lavando == false){
         return;
@@ -409,6 +446,8 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            EEPROM_writeAnything(20, programa);
+            EEPROM_writeAnything(40, contador);
             return;
         }
     }
@@ -426,6 +465,8 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            EEPROM_writeAnything(20, programa);
+            EEPROM_writeAnything(40, contador);
             return;
         }
     }
@@ -443,6 +484,8 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            EEPROM_writeAnything(20, programa);
+            EEPROM_writeAnything(40, contador);
             return;
         }
     }
@@ -462,6 +505,8 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            EEPROM_writeAnything(20, programa);
+            EEPROM_writeAnything(40, contador);
             return;
         }
     }
@@ -481,6 +526,8 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            EEPROM_writeAnything(20, programa);
+            EEPROM_writeAnything(40, contador);
             return;
         }
     }
@@ -500,6 +547,8 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            EEPROM_writeAnything(20, programa);
+            EEPROM_writeAnything(40, contador);
             return;
         }
     }
@@ -519,6 +568,8 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            EEPROM_writeAnything(20, programa);
+            EEPROM_writeAnything(40, contador);
             return;
         }
     }
@@ -538,11 +589,14 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            EEPROM_writeAnything(20, programa);
+            EEPROM_writeAnything(40, contador);
             return;
         }
     }
 
     contador ++;
+    EEPROM_writeAnything(40, contador);
 
 }
 
