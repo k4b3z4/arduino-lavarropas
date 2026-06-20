@@ -19,33 +19,33 @@
 // Config Shield
 
 // LCD
-#define PIN_RS 8
-#define PIN_E  9
-#define PIN_D4 4
-#define PIN_D5 5
-#define PIN_D6 6
-#define PIN_D7 7
+#define PIN_RS A0
+#define PIN_E  A1
+#define PIN_D4 A2
+#define PIN_D5 A3
+#define PIN_D6 A4
+#define PIN_D7 A5
+#define PIN_CT 6
 
 // DIGITAL
-#define PIN_K1 12
-#define PIN_K2 11
-#define PIN_K3 13
-#define PIN_K4 A1
-#define PIN_K5 1
-#define PIN_K6 0
+#define PIN_K1 8
+#define PIN_K2 9
+#define PIN_K3 10
+#define PIN_K4 11
+#define PIN_K5 12
+#define PIN_K6 13
 
-// ANALOG
-#define PIN_KEYPAD A0
-#define PIN_PUERTA A5
-#define PIN_NIVEL  A4
+// SIN USO
+#define PIN_PUERTA 5
+#define PIN_NIVEL  4
 
 // ENCODER
 #define PIN_CLK  3
 #define PIN_DATA 2
-#define PIN_SW   A2
+#define PIN_SW   1
 
 // BEEP
-#define PIN_BEEP A3
+#define PIN_BEEP 0
 
 // *******************************************************************
 
@@ -126,10 +126,11 @@ void setup() {
     pinMode(PIN_BEEP, OUTPUT);
     digitalWrite(PIN_BEEP, 0);
 
-    // button adc input
-    pinMode(PIN_KEYPAD, INPUT);         // ensure Key ADC pin is an input
-    digitalWrite(PIN_KEYPAD, LOW);      // ensure pull-up is off on Key ADC pin
+    // contraste LCD
+    pinMode(PIN_CT, OUTPUT);
+    analogWrite(PIN_CT, 96);
 
+    
     // 10 segundos
     timer1.every(10000, IncrementaContador);
 
