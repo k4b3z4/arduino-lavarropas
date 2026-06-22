@@ -40,8 +40,8 @@
 #define PIN_NIVEL  4
 
 // ENCODER
-#define PIN_CLK  3
-#define PIN_DATA 2
+#define PIN_CLK  2
+#define PIN_DATA 3
 #define PIN_SW   1
 
 // BEEP
