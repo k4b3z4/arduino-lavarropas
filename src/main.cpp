@@ -71,10 +71,9 @@ bool menu_pausa = false;
 
 
 int  encoder_val = 0;
-int  encoder_last = 0;
 int  encoder = 0;
-int  currentStateCLK;
-int  lastStateCLK;
+int  state;
+
 
 int beeps = 0;
 
@@ -142,7 +141,6 @@ void setup() {
     lcd.print("Listo...        ");
 
 
-    lastStateCLK = digitalRead(PIN_CLK);
     // interrupcion encoder
     attachInterrupt(digitalPinToInterrupt(PIN_CLK), doEncoder, CHANGE);
     attachInterrupt(digitalPinToInterrupt(PIN_DATA), doEncoder, CHANGE);
@@ -218,29 +216,26 @@ void loop() {
 
         segundos = calculaTotal(encoder_val);
 
-        if (encoder_val > 13){
-            encoder_val = 13;
-        }
-        if (encoder_val < 1){
-            encoder_val = 1; 
-        }
+        if (encoder > 56) encoder = 56;
+        if (encoder < 1)  encoder = 1; 
+        
 
     }
 
     // Menu detener lavado (modo pausa)
     if( menu_posicion == 1 && lavando == true){
 
-        if (encoder == 0){
+        if (encoder_val == 0){
             lcd.setCursor(0,1);       
             lcd.print("Parar? [No] Si ");
             menu_parar = false;
         }
-        if (encoder == 1){ 
+        if (encoder_val == 1){ 
             lcd.setCursor(0,1);
             lcd.print("Parar?  No [Si]");
             menu_parar = true;
         }
-        if (encoder > 1) encoder = 1;
+        if (encoder > 7) encoder = 7;
         if (encoder < 0) encoder = 0;
 
     }
@@ -660,17 +655,54 @@ int calculaTotal(int prog){
 
 void doEncoder(){
 
-    currentStateCLK = digitalRead(PIN_CLK);
+    //                           _______         _______       
+    //               Pin1 ______|       |_______|       |______ Pin1
+    // negative <---         _______         _______         __      --> positive
+    //               Pin2 __|       |_______|       |_______|   Pin2
 
-	if (currentStateCLK != lastStateCLK  && currentStateCLK == 1){
-		if (digitalRead(PIN_DATA) != currentStateCLK) {
-			encoder --;
-		} else {
-			encoder ++;
-		}
-        encoder_val = encoder;
-	}
+    //	    new	            old
+    //	pin2	pin1	pin2	pin1	Result
+    //	----	----	----	----	------
+    //	0	    0	    0  	    0	    no movement
+    //	0	    0	    0  	    1	    +1
+    //	0	    0	    1	    0	    -1
+    //	0	    0	    1	    1	    +2  (assume pin1 edges only)
+    //	0	    1	    0	    0	    -1
+    //	0	    1	    0	    1	    no movement
+    //	0	    1	    1	    0	    -2  (assume pin1 edges only)
+    //	0	    1	    1	    1	    +1
+    //	1	    0	    0	    0	    +1
+    //	1	    0	    0	    1	    -2  (assume pin1 edges only)
+    //	1	    0	    1	    0	    no movement
+    //	1	    0	    1	    1	    -1
+    //	1	    1	    0	    0	    +2  (assume pin1 edges only)
+    //	1	    1	    0	    1	    -1
+    //	1	    1	    1	    0	    +1
+    //	1	    1	    1	    1	    no movement
 
-	lastStateCLK = currentStateCLK;
+
+
+    uint8_t s = state & 3;
+
+    if (digitalRead(PIN_CLK))  s |= 4;
+    if (digitalRead(PIN_DATA)) s |= 8;
+
+    switch (s) {
+        case 0: case 5: case 10: case 15:
+            break;
+        case 1: case 7: case 8: case 14:
+            encoder++; break;
+        case 2: case 4: case 11: case 13:
+            encoder--; break;
+        case 3: case 12:
+            encoder += 2; break;
+        default:
+            encoder -= 2; break;
+    }
+    encoder_val = encoder / 4;
+    state = (s >> 2);
+
 
 }
+
+
