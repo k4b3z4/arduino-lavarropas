@@ -35,17 +35,14 @@
 #define PIN_K5 12
 #define PIN_K6 13
 
-// SIN USO
-#define PIN_PUERTA 5
-#define PIN_NIVEL  4
 
 // ENCODER
 #define PIN_CLK  2
 #define PIN_DATA 3
-#define PIN_SW   1
+#define PIN_SW   4
 
 // BEEP
-#define PIN_BEEP 0
+#define PIN_BEEP 5
 
 // *******************************************************************
 
@@ -110,12 +107,6 @@ void setup() {
     digitalWrite(PIN_K4, 1);
     digitalWrite(PIN_K5, 1);
     digitalWrite(PIN_K6, 1);
-
-    // entradas
-    pinMode(PIN_PUERTA, INPUT);
-    pinMode(PIN_NIVEL, INPUT);
-    digitalWrite(PIN_PUERTA, LOW);
-    digitalWrite(PIN_NIVEL, LOW);
 
     // encoder
     pinMode(PIN_SW, INPUT_PULLUP);
