@@ -609,8 +609,12 @@ void Estado(byte B){
             lcd.print("Vaciando...     ");
             return;
         }
-        if(B & B11000000){
-            lcd.print("Lavando...      ");
+        if(B & B10000000){
+            if(B & B01000000){
+                lcd.print("Lavando... [<-] ");
+            }else{
+                lcd.print("Lavando... [->] ");
+            }
             return;
         }
 
