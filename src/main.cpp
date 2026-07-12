@@ -1,6 +1,6 @@
 // ********************************************************************
 // Automatizacion Labarropas
-// Arduino Uno + LCD Keypad Shield
+// Arduino Uno + LCD 
 // Federico Pedot fedped@gmail.com
 //
 // ********************************************************************
@@ -42,7 +42,7 @@
 #define PIN_SW   4
 
 // BEEP
-#define PIN_BEEP 5
+#define PIN_BEEP 7
 
 // *******************************************************************
 
@@ -249,6 +249,7 @@ void loop() {
 
         // activa menu principal
         if(menu_posicion == 0){
+            encoder_val = 1;
             if (lavando == false){
                 lcd.clear();
                 lcd.setCursor(0,0);  
