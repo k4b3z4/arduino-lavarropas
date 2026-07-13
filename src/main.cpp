@@ -59,7 +59,6 @@ int    segundos  = 0;
 bool   lavando   = false;
 int    programa  = 1;
 bool   cambia_programa = false;
-bool   restaura = false;
 int    boton     = 0;
 char   buffer[18];
 
@@ -153,7 +152,9 @@ void setup() {
         EEPROM_readAnything(20, programa);
         EEPROM_readAnything(30, segundos);
         EEPROM_readAnything(40, contador);
-        restaura = true;
+        cambia_programa = false;
+        lcd.setCursor(0, 0);
+        lcd.print("Recup");
         beeps = 1;
     }else{
         beeps = 3;
@@ -352,11 +353,7 @@ void loop() {
                 break;
         }
 
-        if(restaura){
-            restaura = false;
-        }else{
-            segundos = calculaTotal(programa);
-        }
+        segundos = calculaTotal(programa);
         cambia_programa = false;
 
     }
@@ -421,7 +418,7 @@ void IncrementaContador() {
         return;
     }
 
-    
+
     if(programa == 1){
         digitalWrite(PIN_K1, !(PROG_B[contador] & B10000000 ));
         digitalWrite(PIN_K2, !(PROG_B[contador] & B01000000 ));
