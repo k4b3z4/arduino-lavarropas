@@ -1,6 +1,6 @@
 // ********************************************************************
-// Automatizacion Labarropas
-// Arduino Uno + LCD 
+// Automatizacion Lavarropas
+// Arduino Uno + LCD + encoder
 // Federico Pedot fedped@gmail.com
 //
 // ********************************************************************
