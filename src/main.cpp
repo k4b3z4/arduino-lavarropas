@@ -269,11 +269,13 @@ void loop() {
 
         // vuelve del menu principal
         else if(menu_posicion == 1){
-            programa = encoder_val;
-            EEPROM_writeAnything(20, programa);
-            lcd.setCursor(0,1);
-            lcd.print("               ");
-            if(lavando == false){
+            if(lavando == false){ 
+                // si no estaba lavando cambia al programa seleccionado
+                // y comienza el ciclo de lavado 'lavando=true'
+                programa = encoder_val;
+                EEPROM_writeAnything(20, programa);
+                lcd.setCursor(0,1);
+                lcd.print("               ");
                 if(programa == 1 || programa == 2 || 
                    programa == 3 || programa == 4 || 
                    programa == 6 || programa == 8 ||
@@ -283,6 +285,8 @@ void loop() {
                 }
                 cambia_programa = true;
             }else{
+                // si estaba lavando y decido parar => lavando=false
+                // si no quiero detener, todo sigue igual
                 if(menu_parar){
                     lavando = false;
                     EEPROM_writeAnything(10, lavando);
@@ -417,10 +421,7 @@ void IncrementaContador() {
         return;
     }
 
-    //lcd.setCursor(9, 0);
-    //sprintf(buffer,"%03d",contador);
-    //lcd.print(buffer);
-
+    
     if(programa == 1){
         digitalWrite(PIN_K1, !(PROG_B[contador] & B10000000 ));
         digitalWrite(PIN_K2, !(PROG_B[contador] & B01000000 ));
@@ -650,7 +651,6 @@ int calculaTotal(int prog){
         case 12:
             seg += sizeof(PROG_X)*10;
             break;
-
     }
 
     return seg;
