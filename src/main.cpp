@@ -150,7 +150,7 @@ void setup() {
         cambia_programa = false;
         lcd.setCursor(0, 0);
         lcd.print("Recup");
-        beeps = 1;
+        beeps = 2;
     }else{
         beeps = 3;
     }
@@ -427,6 +427,7 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            incrementa_contador = 0;
             EEPROM_writeAnything(20, programa);
             EEPROM_writeAnything(40, contador);
             return;
@@ -446,6 +447,7 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            incrementa_contador = 0;
             EEPROM_writeAnything(20, programa);
             EEPROM_writeAnything(40, contador);
             return;
@@ -465,6 +467,7 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            incrementa_contador = 0;
             EEPROM_writeAnything(20, programa);
             EEPROM_writeAnything(40, contador);
             return;
@@ -486,6 +489,7 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            incrementa_contador = 0;
             EEPROM_writeAnything(20, programa);
             EEPROM_writeAnything(40, contador);
             return;
@@ -507,6 +511,7 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            incrementa_contador = 0;
             EEPROM_writeAnything(20, programa);
             EEPROM_writeAnything(40, contador);
             return;
@@ -528,6 +533,7 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            incrementa_contador = 0;
             EEPROM_writeAnything(20, programa);
             EEPROM_writeAnything(40, contador);
             return;
@@ -549,6 +555,7 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            incrementa_contador = 0;
             EEPROM_writeAnything(20, programa);
             EEPROM_writeAnything(40, contador);
             return;
@@ -570,6 +577,7 @@ void IncrementaContador() {
             cambia_programa=true;
             programa ++;
             contador = 0;
+            incrementa_contador = 0;
             EEPROM_writeAnything(20, programa);
             EEPROM_writeAnything(40, contador);
             return;
@@ -613,7 +621,7 @@ void Estado(byte B){
         }
         lcd.print("Esperando...    ");
         return;
-        
+
     }
    
 }
