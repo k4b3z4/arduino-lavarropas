@@ -282,7 +282,7 @@ void loop() {
                 cambia_programa = true;
             }else{
                 // si estaba lavando y decido parar => lavando=false
-                // si no quiero detener, todo sigue igual
+                // si no quiero detener, todo sigue igual Continuando...
                 if(menu_parar){
                     lavando = false;
                     EEPROM_writeAnything(10, lavando);
@@ -290,6 +290,9 @@ void loop() {
                     lcd.print("Prog -  00:00:00");
                     lcd.setCursor(0, 1);
                     lcd.print("Finalizado      ");
+                }else{
+                    lcd.setCursor(0,1);
+                    lcd.print("Continuando...  ");
                 }
                 menu_pausa = false;
             }
@@ -368,13 +371,6 @@ void Reloj(){
     int m;
     int s;
 
-    h = segundos / 3600;
-    m = ( segundos % 3600 ) / 60;
-    s = ( segundos % 3600 ) % 60;
-
-    lcd.setCursor(8, 0);
-    sprintf(buffer,"%02d:%02d:%02d",h,m,s);
-    lcd.print(buffer);
 
     if(lavando == true and menu_pausa == false){
         segundos--;
@@ -385,6 +381,16 @@ void Reloj(){
             EEPROM_writeAnything(30, segundos);
         }
     }
+
+
+    h = segundos / 3600;
+    m = ( segundos % 3600 ) / 60;
+    s = ( segundos % 3600 ) % 60;
+
+    lcd.setCursor(8, 0);
+    sprintf(buffer,"%02d:%02d:%02d",h,m,s);
+    lcd.print(buffer);
+
 
     return;
 }
