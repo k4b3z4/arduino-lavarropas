@@ -46,8 +46,6 @@
 
 // *******************************************************************
 
-
-Timer timer1; // timer para programas
 Timer timer2; // timer para Reloj
 Timer timer3; // timer para beep
 
@@ -55,6 +53,7 @@ LiquidCrystal lcd(PIN_RS, PIN_E, PIN_D4, PIN_D5, PIN_D6, PIN_D7);
 
 
 int    contador  = 0;
+int    incrementa_contador = 0;
 int    segundos  = 0;
 bool   lavando   = false;
 int    programa  = 1;
@@ -118,10 +117,6 @@ void setup() {
     // contraste LCD
     pinMode(PIN_CT, OUTPUT);
     analogWrite(PIN_CT, 96);
-
-    
-    // 10 segundos
-    timer1.every(10000, IncrementaContador);
 
     // 1 segundo
     timer2.every(1000, Reloj);
@@ -358,7 +353,6 @@ void loop() {
 
     }
 
-    timer1.update();
     timer2.update();
     timer3.update();
 
@@ -384,7 +378,12 @@ void Reloj(){
 
     if(lavando == true and menu_pausa == false){
         segundos--;
-        EEPROM_writeAnything(30, segundos);
+        incrementa_contador++;
+        if(incrementa_contador > 9){
+            incrementa_contador = 0;
+            IncrementaContador();
+            EEPROM_writeAnything(30, segundos);
+        }
     }
 
     return;
@@ -408,16 +407,6 @@ void Beep(void){
 // ###########################################################################
 
 void IncrementaContador() {
-
-
-    if(lavando == false){
-        return;
-    }
-
-    if(menu_pausa == true){
-        return;
-    }
-
 
     if(programa == 1){
         digitalWrite(PIN_K1, !(PROG_B[contador] & B10000000 ));
