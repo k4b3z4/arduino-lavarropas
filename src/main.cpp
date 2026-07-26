@@ -590,16 +590,9 @@ void Estado(byte B){
 
     if(menu_posicion == 0){
         lcd.setCursor(0, 1);
-        if(B & B00000100){
-            lcd.print("Llenando...     ");
-            return;
-        }
+        
         if(B & B00100000){
             lcd.print("Centrifugando...");
-            return;
-        }
-        if(B & B00001000){
-            lcd.print("Vaciando...     ");
             return;
         }
         if(B & B10000000){
@@ -610,9 +603,17 @@ void Estado(byte B){
             }
             return;
         }
-
+        if(B & B00000100){
+            lcd.print("Llenando...     ");
+            return;
+        }
+        if(B & B00001000){
+            lcd.print("Vaciando...     ");
+            return;
+        }
         lcd.print("Esperando...    ");
         return;
+        
     }
    
 }
